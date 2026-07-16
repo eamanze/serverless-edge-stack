@@ -1,0 +1,6 @@
+aws_region       = "eu-west-1"
+domain_name      = "example.space"
+hosted_zone_name = "example.space"
+project_name     = "cloud-portfolio"
+price_class      = "PriceClass_100"
+

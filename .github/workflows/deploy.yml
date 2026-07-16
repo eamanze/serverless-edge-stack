@@ -1,0 +1,42 @@
+name: Deploy website
+
+on:
+  push:
+    branches: [main]
+    paths: ["site/**"]
+  workflow_dispatch:
+
+concurrency:
+  group: production-deployment
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    name: Sync to S3 and refresh CloudFront
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - name: Authenticate to AWS with OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - name: Upload HTML with short cache lifetime
+        run: >-
+          aws s3 sync site/ s3://${{ vars.S3_BUCKET_NAME }}/
+          --exclude "assets/*"
+          --delete
+          --cache-control "public,max-age=300,must-revalidate"
+      - name: Upload versionable assets with long cache lifetime
+        run: >-
+          aws s3 sync site/assets/ s3://${{ vars.S3_BUCKET_NAME }}/assets/
+          --delete
+          --cache-control "public,max-age=31536000,immutable"
+      - name: Invalidate edge cache
+        run: aws cloudfront create-invalidation --distribution-id "${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}" --paths "/*.html" "/"
+

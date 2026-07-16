@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A production-minded AWS static website architecture built with Terraform.">
+  <title>Cloud Engineer | AWS Static Platform</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body>
+  <header class="nav wrap">
+    <a class="brand" href="#top" aria-label="Home"><span>CE</span> Cloud Engineer</a>
+    <nav aria-label="Main navigation">
+      <a href="#architecture">Architecture</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#delivery">Delivery</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero wrap">
+      <div>
+        <p class="eyebrow">AWS · Infrastructure as Code · DevOps</p>
+        <h1>I build cloud platforms that are <em>secure, fast, and repeatable.</em></h1>
+        <p class="lede">This site is the proof: a globally distributed static platform on AWS, provisioned with Terraform and deployed through a GitHub Actions pipeline.</p>
+        <div class="actions">
+          <a class="button primary" href="#architecture">Explore the build</a>
+          <a class="button secondary" href="https://github.com/" rel="noreferrer">View source ↗</a>
+        </div>
+      </div>
+      <aside class="terminal" aria-label="Deployment summary">
+        <div class="terminal-bar"><i></i><i></i><i></i><span>deploy.yml</span></div>
+        <pre><code><b>$</b> terraform apply
+<span>✓</span> private S3 origin
+<span>✓</span> TLS certificate issued
+<span>✓</span> CloudFront deployed
+<span>✓</span> DNS records created
+
+<b>$</b> aws s3 sync ./site
+<span>✓</span> assets uploaded
+<span>✓</span> cache invalidated</code></pre>
+      </aside>
+    </section>
+
+    <section class="metrics wrap" aria-label="Platform highlights">
+      <div><strong>HTTPS</strong><span>ACM managed TLS</span></div>
+      <div><strong>Global</strong><span>CloudFront edge network</span></div>
+      <div><strong>Private</strong><span>S3 origin access control</span></div>
+      <div><strong>Automated</strong><span>GitHub OIDC deployments</span></div>
+    </section>
+
+    <section id="architecture" class="section wrap">
+      <p class="eyebrow">Reference architecture</p>
+      <h2>Every request takes the secure path.</h2>
+      <p class="section-copy">DNS resolves at Route 53, CloudFront terminates TLS and serves cached content, while origin access control keeps the S3 bucket unreachable from the public internet.</p>
+      <div class="flow" aria-label="Request flow">
+        <article><small>01</small><b>User</b><span>HTTPS request</span></article><i>→</i>
+        <article><small>02</small><b>Route 53</b><span>Alias record</span></article><i>→</i>
+        <article><small>03</small><b>CloudFront</b><span>TLS + cache</span></article><i>→</i>
+        <article><small>04</small><b>Amazon S3</b><span>Private origin</span></article>
+      </div>
+    </section>
+
+    <section id="capabilities" class="section dark">
+      <div class="wrap">
+        <p class="eyebrow">Engineering decisions</p>
+        <h2>Production-minded by default.</h2>
+        <div class="cards">
+          <article><span>01</span><h3>Security</h3><p>Public access blocked, encrypted storage, least-privilege origin policy, HTTPS redirect, and TLS 1.2 minimum.</p></article>
+          <article><span>02</span><h3>Performance</h3><p>Brotli/Gzip compression and distinct cache policies for immutable assets and HTML content.</p></article>
+          <article><span>03</span><h3>Reliability</h3><p>Versioned infrastructure, deterministic deployments, SPA-friendly error responses, and safe invalidation.</p></article>
+          <article><span>04</span><h3>Operations</h3><p>Remote-ready Terraform state, deployment outputs, validation checks, and a documented rollback path.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="delivery" class="section wrap split">
+      <div><p class="eyebrow">Continuous delivery</p><h2>Commit. Validate. Ship.</h2></div>
+      <ol class="pipeline">
+        <li><b>Pull request</b><span>Terraform format and validation run before merge.</span></li>
+        <li><b>OIDC authentication</b><span>GitHub obtains short-lived AWS credentials—no stored access keys.</span></li>
+        <li><b>Atomic upload</b><span>Hashed assets receive long-lived caching; HTML stays quickly refreshable.</span></li>
+        <li><b>Edge refresh</b><span>A CloudFront invalidation makes the release globally available.</span></li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="wrap"><span>Designed as an AWS cloud engineering case study.</span><span id="year"></span></footer>
+</body>
+</html>
+
