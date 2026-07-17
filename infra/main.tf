@@ -11,7 +11,7 @@ data "aws_route53_zone" "site" {
 }
 
 resource "aws_s3_bucket" "site" {
-  bucket = "${var.project_name}-${data.aws_caller_identity.current.account_id}"
+  bucket        = "${var.project_name}-${data.aws_caller_identity.current.account_id}"
   force_destroy = var.force_destroy_bucket
 }
 data "aws_caller_identity" "current" {}
