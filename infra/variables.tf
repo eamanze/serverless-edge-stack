@@ -26,12 +26,15 @@ variable "enable_versioning" {
   type        = bool
   default     = true
 }
-
+variable "force_destroy_bucket" {
+  description = "Delete all object versions when destroying the S3 bucket."
+  type        = bool
+  default     = true
+}
 variable "github_owner" {
   description = "GitHub user or organization that owns the deployment repository."
   type        = string
 }
-
 variable "github_repository" {
   description = "GitHub repository name allowed to deploy from its main branch."
   type        = string
