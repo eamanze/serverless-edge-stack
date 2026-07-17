@@ -63,9 +63,9 @@ Before presenting the project, replace the placeholder GitHub link in `site/inde
 
 - [Architecture and security](docs/architecture.md)
 - [Provisioning and deployment](docs/deployment.md)
+- [GitHub Actions OIDC setup](docs/github-oidc.md)
 - [Operations and troubleshooting](docs/operations.md)
 
 ## License
 
 MIT
-

@@ -14,3 +14,7 @@ output "cloudfront_domain_name" {
   value = aws_cloudfront_distribution.site.domain_name
 }
 
+output "github_deploy_role_arn" {
+  description = "Set this ARN as the GitHub Actions AWS_DEPLOY_ROLE_ARN variable."
+  value       = aws_iam_role.github_deploy.arn
+}

@@ -37,41 +37,10 @@ aws cloudfront create-invalidation --distribution-id "$DIST" --paths "/*"
 
 ## 3. Configure continuous deployment
 
-Create a GitHub OIDC provider and a least-privilege IAM role. Limit the trust policy `sub` claim to your repository and production environment. The role needs:
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": ["s3:ListBucket"],
-      "Resource": "arn:aws:s3:::YOUR_BUCKET"
-    },
-    {
-      "Effect": "Allow",
-      "Action": ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"],
-      "Resource": "arn:aws:s3:::YOUR_BUCKET/*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": "cloudfront:CreateInvalidation",
-      "Resource": "YOUR_DISTRIBUTION_ARN"
-    }
-  ]
-}
-```
-
-In the GitHub `production` environment, add these non-secret variables:
-
-| Variable | Terraform output/value |
-|---|---|
-| `AWS_DEPLOY_ROLE_ARN` | ARN of the OIDC deployment role |
-| `AWS_REGION` | `aws_region` used by Terraform |
-| `S3_BUCKET_NAME` | `bucket_name` output |
-| `CLOUDFRONT_DISTRIBUTION_ID` | `cloudfront_distribution_id` output |
-
-Protect the environment with required reviewers if desired. A push to `main` that changes `site/**` then deploys automatically.
+Follow the [GitHub Actions OIDC setup guide](github-oidc.md). The Terraform
+configuration creates the provider, branch-scoped trust policy, deployment
+role, and least-privilege permissions. The trusted subject is limited to the
+repository's main branch.
 
 ## Rollback
 
@@ -82,4 +51,3 @@ Protect the environment with required reviewers if desired. A push to `main` tha
 ## Destroy
 
 Empty the versioned bucket (including old versions) before running `terraform destroy`. Destruction is intentionally not automated in CI.
-

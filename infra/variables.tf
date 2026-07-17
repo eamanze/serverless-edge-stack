@@ -27,3 +27,12 @@ variable "enable_versioning" {
   default     = true
 }
 
+variable "github_owner" {
+  description = "GitHub user or organization that owns the deployment repository."
+  type        = string
+}
+
+variable "github_repository" {
+  description = "GitHub repository name allowed to deploy from its main branch."
+  type        = string
+}
